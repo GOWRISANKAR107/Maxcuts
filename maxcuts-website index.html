@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Maxcuts builds high-performing short-form video content systems for brands, creators and businesses." />
+  <meta name="keywords" content="Maxcuts, video editing, short form video, reels, content production, content agency" />
+  <meta property="og:title" content="MAXCUTS — Video Content. Built to Scale." />
+  <meta property="og:description" content="Turn ideas, footage and expertise into consistent short-form content with Maxcuts." />
+  <meta property="og:type" content="website" />
+  <title>MAXCUTS — Video Content. Built to Scale.</title>
+
+  <style>
+    :root {
+      --bg: #080808;
+      --surface: #111111;
+      --surface-2: #171717;
+      --text: #f5f5f5;
+      --muted: #a2a2a2;
+      --line: rgba(255,255,255,.11);
+      --accent: #d7ff3f;
+      --accent-2: #b8e72c;
+      --max: 1240px;
+      --radius: 22px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+    button, input, textarea, select { font: inherit; }
+    button { cursor: pointer; }
+
+    .container { width: min(var(--max), calc(100% - 48px)); margin: auto; }
+    .eyebrow {
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: .16em;
+      font-size: .74rem;
+      font-weight: 800;
+    }
+    .section { padding: 120px 0; border-top: 1px solid var(--line); }
+    .section-head { max-width: 720px; margin-bottom: 56px; }
+    h1 { font-size: clamp(3.4rem, 8vw, 7.8rem); line-height: .9; letter-spacing: -.075em; }
+    h2 { font-size: clamp(2.5rem, 5vw, 5rem); line-height: .98; letter-spacing: -.055em; }
+    h3 { font-size: 1.35rem; line-height: 1.15; }
+    .muted { color: var(--muted); }
+
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+      background: rgba(8,8,8,.72); backdrop-filter: blur(18px);
+      border-bottom: 1px solid transparent; transition: .25s ease;
+    }
+    .nav.scrolled { border-color: var(--line); background: rgba(8,8,8,.9); }
+    .nav-inner { height: 78px; display:flex; align-items:center; justify-content:space-between; }
+    .logo { font-weight: 950; letter-spacing: -.06em; font-size: 1.45rem; }
+    .logo span { color: var(--accent); }
+    .nav-links { display:flex; gap: 28px; align-items:center; }
+    .nav-links a { color:#c9c9c9; font-size:.92rem; transition:.2s; }
+    .nav-links a:hover { color:#fff; }
+    .menu-btn { display:none; border:0; background:none; color:#fff; font-size:1.6rem; }
+
+    .btn {
+      display:inline-flex; align-items:center; justify-content:center; gap:10px;
+      min-height:48px; padding:0 20px; border-radius:999px;
+      border:1px solid var(--line); font-weight:800; font-size:.9rem; transition:.25s;
+    }
+    .btn-primary { background:var(--accent); color:#090909; border-color:var(--accent); }
+    .btn-primary:hover { background:#fff; border-color:#fff; transform:translateY(-2px); }
+    .btn-ghost:hover { border-color:#fff; transform:translateY(-2px); }
+
+    .hero { min-height: 100svh; display:flex; align-items:center; position:relative; padding:150px 0 90px; }
+    .hero:before {
+      content:""; position:absolute; width:600px; height:600px; border-radius:50%;
+      background:radial-gradient(circle, rgba(215,255,63,.14), transparent 65%);
+      right:-220px; top:80px; pointer-events:none;
+    }
+    .hero-grid { display:grid; grid-template-columns: 1.1fr .9fr; gap:70px; align-items:end; }
+    .hero-copy p { max-width:630px; color:#b3b3b3; font-size:1.1rem; margin:32px 0; }
+    .hero-actions { display:flex; gap:12px; flex-wrap:wrap; }
+    .hero-meta { margin-top:55px; display:flex; gap:30px; flex-wrap:wrap; }
+    .meta-item strong { display:block; font-size:1.1rem; }
+    .meta-item span { color:#777; font-size:.8rem; }
+    .hero-card {
+      min-height:520px; border:1px solid var(--line); border-radius:32px; overflow:hidden;
+      background:linear-gradient(145deg,#1b1b1b,#0d0d0d);
+      position:relative; display:flex; align-items:flex-end;
+      box-shadow:0 30px 100px rgba(0,0,0,.4);
+    }
+    .hero-card:before {
+      content:""; position:absolute; inset:0;
+      background:
+        radial-gradient(circle at 70% 25%, rgba(215,255,63,.22), transparent 25%),
+        linear-gradient(135deg, transparent 40%, rgba(255,255,255,.04) 40%, transparent 41%);
+    }
+    .play { position:absolute; left:50%; top:43%; transform:translate(-50%,-50%); width:92px; height:92px; border-radius:50%; background:var(--accent); color:#000; display:grid; place-items:center; font-size:1.5rem; box-shadow:0 0 0 12px rgba(215,255,63,.08); }
+    .hero-card-label { position:relative; padding:28px; width:100%; background:linear-gradient(transparent,rgba(0,0,0,.85)); }
+    .hero-card-label span { color:var(--accent); font-size:.75rem; text-transform:uppercase; letter-spacing:.12em; font-weight:800; }
+    .hero-card-label strong { display:block; font-size:1.5rem; margin-top:5px; }
+
+    .statement { display:grid; grid-template-columns: .7fr 1.3fr; gap:60px; align-items:start; }
+    .statement p { color:#b1b1b1; font-size:clamp(1.4rem,2.5vw,2.2rem); letter-spacing:-.025em; max-width:820px; }
+
+    .grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+    .card { border:1px solid var(--line); background:var(--surface); border-radius:var(--radius); padding:30px; transition:.3s; }
+    .card:hover { transform:translateY(-5px); border-color:rgba(215,255,63,.35); }
+    .number { color:var(--accent); font-weight:900; font-size:.78rem; letter-spacing:.1em; margin-bottom:70px; }
+    .card p { color:#8f8f8f; margin-top:14px; font-size:.94rem; }
+    .tag { display:inline-block; color:#858585; font-size:.72rem; margin-top:22px; text-transform:uppercase; letter-spacing:.08em; }
+
+    .services { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--line); border:1px solid var(--line); }
+    .service { background:var(--bg); padding:38px; min-height:245px; transition:.25s; }
+    .service:hover { background:#101010; }
+    .service-top { display:flex; justify-content:space-between; margin-bottom:60px; }
+    .service-num { color:var(--accent); font-weight:900; }
+    .arrow { color:#666; font-size:1.2rem; }
+    .service p { color:#8f8f8f; margin-top:12px; max-width:470px; }
+
+    .benefits { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+    .benefit { padding:30px; border-top:1px solid var(--line); }
+    .benefit strong { font-size:2.8rem; display:block; letter-spacing:-.06em; margin-bottom:10px; }
+    .benefit p { color:#858585; font-size:.9rem; }
+
+    .portfolio { display:grid; grid-template-columns:1.4fr .8fr .8fr; gap:16px; }
+    .work { min-height:420px; border:1px solid var(--line); border-radius:var(--radius); overflow:hidden; position:relative; background:#151515; }
+    .work:nth-child(2), .work:nth-child(3) { min-height:300px; }
+    .work-bg { position:absolute; inset:0; background:
+      radial-gradient(circle at 70% 25%, rgba(215,255,63,.18), transparent 25%),
+      linear-gradient(135deg,#202020,#0b0b0b 65%); }
+    .work:nth-child(2) .work-bg { background:radial-gradient(circle at 25% 25%, rgba(255,255,255,.13), transparent 22%), linear-gradient(145deg,#242424,#090909); }
+    .work:nth-child(3) .work-bg { background:radial-gradient(circle at 70% 70%, rgba(215,255,63,.13), transparent 25%), linear-gradient(145deg,#181818,#080808); }
+    .work-info { position:absolute; bottom:0; left:0; right:0; padding:25px; background:linear-gradient(transparent,rgba(0,0,0,.9)); }
+    .work-info span { color:var(--accent); text-transform:uppercase; letter-spacing:.1em; font-size:.7rem; font-weight:800; }
+    .work-info strong { display:block; margin-top:5px; font-size:1.3rem; }
+
+    .process { display:grid; grid-template-columns:repeat(5,1fr); gap:1px; background:var(--line); border:1px solid var(--line); }
+    .step { background:var(--bg); padding:28px; min-height:270px; }
+    .step-num { color:var(--accent); font-weight:900; font-size:.8rem; }
+    .step h3 { margin-top:70px; }
+    .step p { color:#858585; font-size:.9rem; margin-top:12px; }
+
+    .pricing { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+    .price-card { border:1px solid var(--line); background:var(--surface); padding:34px; border-radius:var(--radius); }
+    .price-card.featured { border-color:rgba(215,255,63,.5); box-shadow:0 0 0 1px rgba(215,255,63,.12); }
+    .price-card .label { color:var(--accent); font-size:.72rem; text-transform:uppercase; font-weight:900; letter-spacing:.12em; }
+    .price-card h3 { margin-top:12px; font-size:2rem; }
+    .price-card p { color:#858585; margin:12px 0 25px; }
+    .price-list { list-style:none; border-top:1px solid var(--line); padding-top:18px; }
+    .price-list li { padding:8px 0; color:#b8b8b8; font-size:.9rem; }
+    .price-list li:before { content:"✓"; color:var(--accent); margin-right:9px; }
+
+    .faq { max-width:900px; }
+    details { border-top:1px solid var(--line); padding:24px 0; }
+    details:last-child { border-bottom:1px solid var(--line); }
+    summary { cursor:pointer; list-style:none; display:flex; justify-content:space-between; font-weight:800; font-size:1.1rem; }
+    summary::-webkit-details-marker { display:none; }
+    summary:after { content:"+"; color:var(--accent); font-size:1.3rem; }
+    details[open] summary:after { content:"−"; }
+    details p { color:#858585; max-width:760px; margin-top:16px; }
+
+    .contact-wrap { display:grid; grid-template-columns:.8fr 1.2fr; gap:70px; }
+    .contact-copy p { color:#8e8e8e; max-width:470px; margin:22px 0 30px; }
+    .contact-form { border:1px solid var(--line); border-radius:var(--radius); background:var(--surface); padding:30px; }
+    .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    .field { margin-bottom:14px; }
+    label { display:block; color:#aaa; font-size:.75rem; margin-bottom:7px; text-transform:uppercase; letter-spacing:.08em; }
+    input, textarea, select { width:100%; border:1px solid var(--line); background:#0b0b0b; color:#fff; border-radius:12px; padding:14px 15px; outline:none; }
+    input:focus, textarea:focus, select:focus { border-color:rgba(215,255,63,.6); }
+    textarea { min-height:130px; resize:vertical; }
+    .form-message { display:none; margin-top:14px; padding:13px; border-radius:10px; background:rgba(215,255,63,.08); color:var(--accent); font-size:.9rem; }
+
+    footer { padding:45px 0; border-top:1px solid var(--line); }
+    .footer-top { display:flex; justify-content:space-between; gap:30px; }
+    .footer-brand p { color:#777; max-width:380px; margin-top:12px; font-size:.9rem; }
+    .footer-links { display:flex; gap:22px; color:#888; font-size:.82rem; }
+    .footer-bottom { margin-top:45px; padding-top:20px; border-top:1px solid var(--line); color:#5f5f5f; font-size:.75rem; display:flex; justify-content:space-between; }
+
+    .reveal { opacity:0; transform:translateY(24px); transition:opacity .7s ease, transform .7s ease; }
+    .reveal.visible { opacity:1; transform:none; }
+
+    .whatsapp {
+      position:fixed; right:20px; bottom:20px; z-index:45;
+      width:54px; height:54px; border-radius:50%; display:grid; place-items:center;
+      background:#25D366; color:#fff; font-weight:900; box-shadow:0 12px 30px rgba(0,0,0,.35);
+    }
+
+    @media (max-width: 980px) {
+      .hero-grid, .statement, .contact-wrap { grid-template-columns:1fr; }
+      .hero-card { min-height:420px; }
+      .grid-3, .benefits, .pricing { grid-template-columns:1fr 1fr; }
+      .process { grid-template-columns:1fr 1fr; }
+      .portfolio { grid-template-columns:1fr 1fr; }
+      .work:first-child { grid-column:1/-1; }
+    }
+
+    @media (max-width: 720px) {
+      .container { width:min(var(--max),calc(100% - 30px)); }
+      .section { padding:82px 0; }
+      .nav-links { display:none; position:absolute; top:78px; left:0; right:0; padding:18px; background:#0a0a0a; border-bottom:1px solid var(--line); flex-direction:column; align-items:flex-start; }
+      .nav-links.open { display:flex; }
+      .menu-btn { display:block; }
+      .nav-cta { display:none; }
+      .grid-3, .benefits, .pricing, .services, .portfolio, .process, .form-grid { grid-template-columns:1fr; }
+      .work:first-child { grid-column:auto; }
+      .hero { padding-top:130px; }
+      .hero-card { min-height:350px; }
+      .hero-meta { gap:18px; }
+      .footer-top, .footer-bottom { flex-direction:column; }
+      .footer-links { flex-wrap:wrap; }
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="nav" id="nav">
+    <div class="container nav-inner">
+      <a class="logo" href="#top">MAX<span>CUTS</span></a>
+      <div class="nav-links" id="navLinks">
+        <a href="#services">Services</a>
+        <a href="#work">Work</a>
+        <a href="#process">Process</a>
+        <a href="#pricing">Packages</a>
+        <a href="#faq">FAQ</a>
+      </div>
+      <a class="btn btn-primary nav-cta" href="#contact">Start a Project</a>
+      <button class="menu-btn" id="menuBtn" aria-label="Open menu">☰</button>
+    </div>
+  </nav>
+
+  <main id="top">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-copy reveal">
+          <div class="eyebrow">Video Production · Content Systems</div>
+          <h1>Video content.<br><span style="color:var(--accent)">Built to scale.</span></h1>
+          <p>Maxcuts turns your ideas, footage and expertise into consistent short-form content designed to keep your brand visible, relevant and growing.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#contact">Start a Project →</a>
+            <a class="btn btn-ghost" href="#work">View Our Work</a>
+          </div>
+          <div class="hero-meta">
+            <div class="meta-item"><strong>4–10+</strong><span>Videos / month</span></div>
+            <div class="meta-item"><strong>01 Team</strong><span>For your content engine</span></div>
+            <div class="meta-item"><strong>End-to-end</strong><span>From footage to delivery</span></div>
+          </div>
+        </div>
+
+        <div class="hero-card reveal">
+          <div class="play">▶</div>
+          <div class="hero-card-label">
+            <span>Maxcuts Showreel</span>
+            <strong>Make every second count.</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container statement reveal">
+        <div class="eyebrow">About Maxcuts</div>
+        <p>We build a reliable content production system around your brand — so you can publish more consistently without spending your week inside an editing timeline.</p>
+      </div>
+    </section>
+
+    <section class="section" id="services">
+      <div class="container">
+        <div class="section-head reveal">
+          <div class="eyebrow">What We Create</div>
+          <h2>Everything your content engine needs.</h2>
+        </div>
+
+        <div class="grid-3">
+          <article class="card reveal"><div class="number">01</div><h3>Short-form videos</h3><p>Fast, engaging Reels and Shorts built for attention, retention and repeat viewing.</p><span class="tag">Reels · Shorts · Social</span></article>
+          <article class="card reveal"><div class="number">02</div><h3>Content repurposing</h3><p>Turn one long-form recording, podcast or webinar into a library of platform-ready clips.</p><span class="tag">Repurpose · Multiply · Scale</span></article>
+          <article class="card reveal"><div class="number">03</div><h3>Talking-head edits</h3><p>Clean cuts, captions, visual hooks and pacing that make expert-led content easier to watch.</p><span class="tag">Experts · Founders · Coaches</span></article>
+          <article class="card reveal"><div class="number">04</div><h3>Educational content</h3><p>Transform knowledge into clear, structured videos that teach while building authority.</p><span class="tag">Education · Authority</span></article>
+          <article class="card reveal"><div class="number">05</div><h3>Brand content</h3><p>Consistent visual language and editing across the content your audience sees every week.</p><span class="tag">Brand · Consistency</span></article>
+          <article class="card reveal"><div class="number">06</div><h3>Custom content systems</h3><p>A production workflow designed around your volume, team, channels and growth goals.</p><span class="tag">Custom · Scalable</span></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-head reveal">
+          <div class="eyebrow">Services</div>
+          <h2>From raw footage to ready-to-publish.</h2>
+        </div>
+        <div class="services">
+          <article class="service reveal"><div class="service-top"><span class="service-num">01</span><span class="arrow">↗</span></div><h3>Short-form video editing</h3><p>High-retention edits for Instagram, YouTube Shorts, LinkedIn and other vertical-first platforms.</p></article>
+          <article class="service reveal"><div class="service-top"><span class="service-num">02</span><span class="arrow">↗</span></div><h3>Long-form → short-form</h3><p>We identify the strongest moments and turn them into multiple pieces of content.</p></article>
+          <article class="service reveal"><div class="service-top"><span class="service-num">03</span><span class="arrow">↗</span></div><h3>Content packaging</h3><p>Captions, hooks, pacing, visual treatments and thumbnails that make your content feel complete.</p></article>
+          <article class="service reveal"><div class="service-top"><span class="service-num">04</span><span class="arrow">↗</span></div><h3>Content planning</h3><p>Build a repeatable monthly content pipeline around your goals, pillars and audience.</p></article>
+          <article class="service reveal"><div class="service-top"><span class="service-num">05</span><span class="arrow">↗</span></div><h3>AI-assisted production</h3><p>Use AI where it improves speed and workflow without sacrificing creative quality or brand voice.</p></article>
+          <article class="service reveal"><div class="service-top"><span class="service-num">06</span><span class="arrow">↗</span></div><h3>Custom production systems</h3><p>A tailored content workflow for brands that need predictable output at higher volumes.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-head reveal">
+          <div class="eyebrow">Why Maxcuts</div>
+          <h2>Less production chaos. More content.</h2>
+        </div>
+        <div class="benefits">
+          <div class="benefit reveal"><strong>01</strong><h3>Consistent output</h3><p>Keep your content calendar moving without chasing editors every week.</p></div>
+          <div class="benefit reveal"><strong>02</strong><h3>Faster turnaround</h3><p>A defined workflow reduces unnecessary back-and-forth and delays.</p></div>
+          <div class="benefit reveal"><strong>03</strong><h3>Scalable production</h3><p>Start with a manageable monthly volume and increase output as you grow.</p></div>
+          <div class="benefit reveal"><strong>04</strong><h3>One creative partner</h3><p>Strategy, editing and content operations working from the same system.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="work">
+      <div class="container">
+        <div class="section-head reveal">
+          <div class="eyebrow">Selected Work</div>
+          <h2>Content that earns the next second.</h2>
+          <p class="muted" style="margin-top:18px">Replace these showcase cards with your real Maxcuts projects, thumbnails or embedded videos.</p>
+        </div>
+        <div class="portfolio">
+          <article class="work reveal"><div class="work-bg"></div><div class="work-info"><span>Project Showcase</span><strong>Real Estate / Architecture</strong></div></article>
+          <article class="work reveal"><div class="work-bg"></div><div class="work-info"><span>Education</span><strong>Expert-Led Content</strong></div></article>
+          <article class="work reveal"><div class="work-bg"></div><div class="work-info"><span>Entertainment</span><strong>High-Retention Shorts</strong></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="process">
+      <div class="container">
+        <div class="section-head reveal">
+          <div class="eyebrow">Our Process</div>
+          <h2>A simple system. Built around you.</h2>
+        </div>
+        <div class="process">
+          <div class="step reveal"><div class="step-num">STEP 01</div><h3>Discovery</h3><p>Understand your brand, audience, goals and existing content.</p></div>
+          <div class="step reveal"><div class="step-num">STEP 02</div><h3>Planning</h3><p>Define content pillars, formats, volume and production cadence.</p></div>
+          <div class="step reveal"><div class="step-num">STEP 03</div><h3>Production</h3><p>Collect footage and turn ideas into structured editing briefs.</p></div>
+          <div class="step reveal"><div class="step-num">STEP 04</div><h3>Editing</h3><p>Our team edits, packages and prepares the content for review.</p></div>
+          <div class="step reveal"><div class="step-num">STEP 05</div><h3>Delivery</h3><p>Final content is organized and delivered ready for publishing.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="pricing">
+      <div class="container">
+        <div class="section-head reveal">
+          <div class="eyebrow">Monthly Packages</div>
+          <h2>Choose your content volume.</h2>
+          <p class="muted" style="margin-top:18px">Starting packages can be adjusted based on editing complexity, footage and production requirements.</p>
+        </div>
+        <div class="pricing">
+          <article class="price-card reveal"><div class="label">Starter</div><h3>4 Videos</h3><p>For brands testing a consistent content rhythm.</p><ul class="price-list"><li>4 short-form videos</li><li>Professional editing</li><li>Captions & basic graphics</li><li>Monthly delivery</li></ul><a class="btn btn-ghost" style="margin-top:25px" href="#contact">Discuss Package</a></article>
+          <article class="price-card featured reveal"><div class="label">Growth</div><h3>6 Videos</h3><p>For businesses ready to publish consistently.</p><ul class="price-list"><li>6 short-form videos</li><li>Hook & pacing optimization</li><li>Captions & visual treatments</li><li>Structured monthly workflow</li></ul><a class="btn btn-primary" style="margin-top:25px" href="#contact">Start With Growth</a></article>
+          <article class="price-card reveal"><div class="label">Scale</div><h3>8–10+ Videos</h3><p>For brands building a serious content engine.</p><ul class="price-list"><li>8–10+ videos</li><li>Higher-volume production</li><li>Repurposing workflow</li><li>Custom content system</li></ul><a class="btn btn-ghost" style="margin-top:25px" href="#contact">Build My System</a></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="faq">
+      <div class="container">
+        <div class="section-head reveal">
+          <div class="eyebrow">FAQ</div>
+          <h2>Questions, answered.</h2>
+        </div>
+        <div class="faq">
+          <details class="reveal"><summary>What type of videos do you edit?</summary><p>We specialize in short-form videos, Reels, Shorts, talking-head content, educational videos, project showcases and repurposed clips.</p></details>
+          <details class="reveal"><summary>Do I need to provide the footage?</summary><p>Usually yes. You provide the raw footage, recordings or source material and we handle the editing and packaging. Custom production arrangements can also be discussed.</p></details>
+          <details class="reveal"><summary>Can you work with our existing brand style?</summary><p>Yes. We can work from your existing brand guidelines, references, fonts, colors, editing style and content examples.</p></details>
+          <details class="reveal"><summary>How many videos should we start with?</summary><p>For most brands, 4–6 videos per month is a practical starting point. Once the workflow is stable, production can scale to 8–10 or more.</p></details>
+          <details class="reveal"><summary>Do you offer custom packages?</summary><p>Yes. If your volume, format or production requirements don't fit a standard package, we'll scope a custom monthly workflow.</p></details>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="contact">
+      <div class="container contact-wrap">
+        <div class="contact-copy reveal">
+          <div class="eyebrow">Start a Project</div>
+          <h2>Let's build your content engine.</h2>
+          <p>Tell us what you're creating, how often you want to publish and where you're getting stuck. We'll map out the simplest production system for you.</p>
+          <a class="btn btn-primary" href="https://wa.me/918890350751?text=Hi%20Maxcuts%2C%20I%27d%20like%20to%20discuss%20a%20content%20project." target="_blank" rel="noopener">WhatsApp Maxcuts →</a>
+        </div>
+
+        <form class="contact-form reveal" id="contactForm">
+          <div class="form-grid">
+            <div class="field"><label for="name">Name</label><input id="name" name="name" required placeholder="Your name"></div>
+            <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" required placeholder="you@company.com"></div>
+          </div>
+          <div class="form-grid">
+            <div class="field"><label for="business">Business</label><input id="business" name="business" placeholder="Company / Brand"></div>
+            <div class="field"><label for="volume">Monthly volume</label><select id="volume" name="volume"><option>4 videos</option><option>6 videos</option><option>8–10 videos</option><option>10+ videos</option><option>Not sure yet</option></select></div>
+          </div>
+          <div class="field"><label for="message">Tell us about the project</label><textarea id="message" name="message" placeholder="What kind of content do you need?"></textarea></div>
+          <button class="btn btn-primary" type="submit">Send Project Request →</button>
+          <div class="form-message" id="formMessage">Thanks — your request is ready. Connect the form to your email/CRM backend before launch.</div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a class="logo" href="#top">MAX<span>CUTS</span></a>
+          <p>Video production and content systems for brands that want to publish consistently and grow.</p>
+        </div>
+        <div class="footer-links">
+          <a href="#services">Services</a><a href="#work">Work</a><a href="#process">Process</a><a href="#pricing">Packages</a><a href="#contact">Contact</a>
+        </div>
+      </div>
+      <div class="footer-bottom"><span>© 2026 Maxcuts. All rights reserved.</span><span>Video Content · Built to Scale.</span></div>
+    </div>
+  </footer>
+
+  <a class="whatsapp" href="https://wa.me/918890350751?text=Hi%20Maxcuts%2C%20I%27d%20like%20to%20start%20a%20project." target="_blank" rel="noopener" aria-label="Chat with Maxcuts on WhatsApp">WA</a>
+
+  <script>
+    const nav = document.getElementById("nav");
+    const menuBtn = document.getElementById("menuBtn");
+    const navLinks = document.getElementById("navLinks");
+
+    window.addEventListener("scroll", () => nav.classList.toggle("scrolled", window.scrollY > 20));
+    menuBtn.addEventListener("click", () => navLinks.classList.toggle("open"));
+    navLinks.querySelectorAll("a").forEach(a => a.addEventListener("click", () => navLinks.classList.remove("open")));
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: .12 });
+
+    document.querySelectorAll(".reveal").forEach(el => observer.observe(el));
+
+    document.getElementById("contactForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const data = new FormData(this);
+      const text =
+        `Hi Maxcuts, I'd like to start a project.%0A%0A` +
+        `Name: ${encodeURIComponent(data.get("name"))}%0A` +
+        `Email: ${encodeURIComponent(data.get("email"))}%0A` +
+        `Business: ${encodeURIComponent(data.get("business"))}%0A` +
+        `Monthly volume: ${encodeURIComponent(data.get("volume"))}%0A` +
+        `Project: ${encodeURIComponent(data.get("message"))}`;
+      window.open(`https://wa.me/918890350751?text=${text}`, "_blank");
+      document.getElementById("formMessage").style.display = "block";
+    });
+  </script>
+</body>
+</html>
